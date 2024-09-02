@@ -1,0 +1,1 @@
+Only to keep app router separate from src/pages

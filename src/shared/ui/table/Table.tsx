@@ -6,10 +6,20 @@ type Props<T> = PropsWithChildren<{
 	TdCell: FC<{ objKey: keyof T; obj: T }>;
 	keyGetter: (obj: T) => string;
 	omitKeys?: Array<keyof T>;
+	ActionThCell?: FC;
+	ActionTdCell?: FC<{ obj: T }>;
 }>;
 
 export function Table<T extends object>(props: Props<T>) {
-	const { data, keyGetter, ThCell, TdCell, omitKeys = [] } = props;
+	const {
+		data,
+		keyGetter,
+		ThCell,
+		TdCell,
+		omitKeys = [],
+		ActionThCell,
+		ActionTdCell,
+	} = props;
 
 	const headers: Array<ReactNode> = [];
 	const rows: Array<ReactNode> = [];
@@ -25,28 +35,38 @@ export function Table<T extends object>(props: Props<T>) {
 			}
 
 			cells.push(
-				<td
-					key={key.toString()}
-					className="p-3 dark:bg-slate-500 dark:border-b-slate-700 border-b"
-				>
+				<Td>
 					<TdCell
 						objKey={key}
 						obj={obj}
 					/>
-				</td>
+				</Td>
 			);
 
 			if (headers.length < keys.length - omitKeys.length) {
 				headers.push(
-					<th
-						key={key.toString()}
-						className="p-3 dark:bg-slate-700"
-					>
+					<Th key={key.toString()}>
 						<ThCell objKey={key} />
-					</th>
+					</Th>
 				);
 			}
 		}
+		if (!ActionTdCell) {
+			continue
+		}
+		cells.push(
+			<Td key="action-cell">
+				<ActionTdCell obj={obj} />
+			</Td>
+		)
+	}
+
+	if (ActionThCell || ActionTdCell) {
+		headers.push(
+			<Th key="action-header">
+				{ActionThCell ? <ActionThCell /> : null}
+			</Th>
+		)
 	}
 
 	return (
@@ -56,5 +76,21 @@ export function Table<T extends object>(props: Props<T>) {
 			</thead>
 			<tbody>{rows}</tbody>
 		</table>
+	);
+}
+
+const Th: FC<PropsWithChildren> = ({ children }) => {
+	return (
+		<td className="p-3 dark:bg-slate-700">
+			{children}
+		</td>
+	);
+}
+
+const Td: FC<PropsWithChildren> = ({ children }) => {
+	return (
+		<td className="p-3 dark:bg-slate-500 dark:border-b-slate-700 border-b">
+			{children}
+		</td>
 	);
 }

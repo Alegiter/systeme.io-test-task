@@ -116,5 +116,12 @@ const PRODUCTS: Array<Product> = [
 }));
 
 export const db = {
-    products: PRODUCTS
+    products: {
+      find() {
+        return PRODUCTS
+      },
+      findById(id: number) {
+        return PRODUCTS.find((product) => product.id === id)
+      }
+    }
 }

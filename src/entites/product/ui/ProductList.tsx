@@ -2,8 +2,9 @@ import { FC } from "react";
 import { getProductList } from "../api";
 import { Table } from "@/src/shared/ui";
 import type { Product } from "@/src/shared/api/db";
+import Link from "next/link";
 
-export const ProductList: FC = async () => {
+export async function ProductList() {
     const products = await getProductList()
 
     return (
@@ -13,6 +14,7 @@ export const ProductList: FC = async () => {
             TdCell={ProductCell}
             keyGetter={productKeyGetter}
             omitKeys={["id"]}
+            ActionTdCell={ProductEditCell}
         />
     )
 }
@@ -51,4 +53,19 @@ const ProductHeaderCell: FC<{
         default:
             return <>{key}</>
     }
+}
+
+const ProductEditCell: FC<{
+    obj: Product
+}> = ({ obj }) => {
+    const productId = obj.id
+
+    return (
+        <Link
+            href={`/products/edit/${productId}`}
+            className="dark:bg-slate-400 px-2 py-1 rounded"
+        >
+            Edit
+        </Link>
+    )
 }
