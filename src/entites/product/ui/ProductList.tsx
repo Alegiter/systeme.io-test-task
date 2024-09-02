@@ -14,7 +14,7 @@ export async function ProductList() {
             TdCell={ProductCell}
             keyGetter={productKeyGetter}
             omitKeys={["id"]}
-            ActionTdCell={ProductEditCell}
+            extraRightColumns={["edit"]}
         />
     )
 }
@@ -24,7 +24,7 @@ function productKeyGetter(product: Product): string {
 }
 
 const ProductCell: FC<{
-    objKey: keyof Product,
+    objKey: keyof Product | "edit",
     obj: Product
 }> = (props) => {
     const { objKey, obj } = props
@@ -37,29 +37,31 @@ const ProductCell: FC<{
             return <>{obj.active ? "Active" : "Not active"}</>
         case "createdAt":
             return <>format({JSON.stringify(obj.createdAt)})</>
+        case "edit": 
+            return <ProductEditCell productId={obj.id}/>
         default:
             return null
     }
 }
 
 const ProductHeaderCell: FC<{
-    objKey: keyof Product
+    objKey: keyof Product | "edit"
 }> = (props) => {
     const { objKey: key } = props
 
     switch (key) {
         case "active":
             return <>ActiveIcon</>
+        case "edit":
+            return null
         default:
             return <>{key}</>
     }
 }
 
 const ProductEditCell: FC<{
-    obj: Product
-}> = ({ obj }) => {
-    const productId = obj.id
-
+    productId: number
+}> = ({ productId }) => {
     return (
         <Link
             href={`/products/edit/${productId}`}
