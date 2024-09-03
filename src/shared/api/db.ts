@@ -120,8 +120,11 @@ const PRODUCTS = [
 
 export const db = {
     products: {
-      find() {
-        return PRODUCTS
+      find(q: string | null) {
+        if (!q) {
+          return PRODUCTS
+        }
+        return PRODUCTS.filter((product) => product.name.includes(q))
       },
       findById(id: number) {
         return PRODUCTS.find((product) => product.id === id)

@@ -1,10 +1,10 @@
 import { ProductArraySchema, ProductSchema } from "@/src/shared/api"
 
-export async function getProductList(options?: {/* like filter or limit */ }) {
-    // debugger
-    void options
+export async function getProductList(options?: { q: string }) {
+    debugger
+    const { q } = options || {}
 
-    return fetch(process.env.URL + "/api/products", { next: { tags: ["/products"] } })
+    return fetch(process.env.URL + "/api/products" + (q ? `?q=${q}` : ""), { next: { tags: ["/products"] } })
         .then(res => res.json())
         .then(data => ProductArraySchema.parse(data))
 }

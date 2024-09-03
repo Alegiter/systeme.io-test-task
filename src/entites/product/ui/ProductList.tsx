@@ -3,9 +3,12 @@ import { getProductList } from "../api";
 import { Table } from "@/src/shared/ui";
 import type { Product } from "@/src/shared/api/db";
 import Link from "next/link";
+import { getSearchParam } from "@/src/app/context";
 
 export async function ProductList() {
-    const products = await getProductList()
+    debugger
+    const q = getSearchParam()
+    const products = await getProductList({q})
 
     return (
         <Table
