@@ -1,4 +1,4 @@
-import { getProductById } from "@/src/entites/product";
+import { getProductById } from "@/src/entities/product";
 import { ProductEditFormUi } from "@/src/features/edit-product";
 import { notFound } from "next/navigation";
 
