@@ -13,7 +13,7 @@ export default async function Page(props: { params: { productId: string } }) {
     return (
         <dialog
             open
-            className="top-1/2"
+            className="top-1/2 p-2 text-inherit bg-slate-800"
         >
             <ProductEditFormUi product={product} />
         </dialog>

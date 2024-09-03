@@ -1,15 +1,21 @@
-export type Product = {
-  id: number,
-  name: string,
-  options: {
-      size: "S" | "M" | "L" | "XL" | "XXL" | string,
-      amount: number
-  },
-  active: boolean,
-  createdAt: Date
-}
+import { z } from "zod";
 
-const PRODUCTS: Array<Product> = [
+export type Product = z.infer<typeof ProductSchema>
+
+export const ProductSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  options: z.object({
+    size: z.string(),
+    amount: z.number(),
+  }),
+  active: z.boolean(),
+  createdAt: z.string().transform((dateString) => new Date(dateString))
+})
+
+export const ProductArraySchema = z.array(ProductSchema)
+
+const PRODUCTS = [
   {
     id: 14381328,
     name: "id quis voluptate nostrud",
@@ -110,10 +116,7 @@ const PRODUCTS: Array<Product> = [
     active: true,
     createdAt: "2012-09-24T01:42:32.0Z",
   },
-].map((product) => ({
-  ...product,
-  createdAt: new Date(product.createdAt)
-}));
+]
 
 export const db = {
     products: {

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "zod": "^3.23.8",
     "react": "^18",
     "react-dom": "^18",
     "next": "14.2.7"

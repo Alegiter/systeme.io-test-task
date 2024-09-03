@@ -1,37 +1,46 @@
-"use client"
+"use client";
 
 import { Product } from "@/src/shared/api/db";
 import { FC } from "react";
 import { updateProduct } from "../api/updateProduct";
 import { useRouter } from "next/navigation";
-import { ignoreFormAction } from "@/src/shared/lib";
+import { DefaultFormFieldUi, ObjectFormUi } from "@/src/shared/ui/object-form";
 
 type Props = {
-    product: Product
-}
+    product: Product;
+};
 export const ProductEditForm: FC<Props> = (props) => {
-    const { product } = props
-    const router = useRouter()
+    const { product } = props;
+    const router = useRouter();
     const handle = async (formData: FormData) => {
-        await updateProduct(product.id, formData)
-        router.back()
-    }
+        await updateProduct(product.id, formData);
+        router.back();
+    };
     const discard = () => {
-        router.back()
-    }
+        router.back();
+    };
     return (
-        <form action={handle}>
-            <div>
-                <label htmlFor="name">Name:</label>
-                <input id="name" name="name" defaultValue={product.name} className="dark:bg-slate-500" />
-            </div>
-            <button
-                formAction={ignoreFormAction}
-                onClick={discard}
-            >
-                Discard
-            </button>
-            <button type="submit">Save</button>
-        </form>
-    )
+        <ObjectFormUi
+            obj={product}
+            FormField={ProductFormField}
+            actionHandler={handle}
+            discardHandler={discard}
+        />
+    );
+};
+
+const ProductFormField: FC<{
+    objKey: keyof Product,
+    obj: Product
+}> = (props) => {
+    const { objKey, obj } = props
+    switch (objKey) {
+        case "active":
+            return (<div>
+                <label>Is Active</label>
+                <div>Some switch component</div>
+            </div>)
+        default:
+            return <DefaultFormFieldUi objKey={objKey} obj={obj} />
+    }
 }
